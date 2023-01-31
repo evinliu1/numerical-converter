@@ -16,14 +16,18 @@ window = sg.Window('Converter Application', layout)
 def binToDec(val):
     converted_value = 0
     error_message = '[ something doesn\'t seem right with your input ]'
+
     # increment power 
     counter = 0
+
     # splits string input into a list by character
     checker = [val for val in val]
     condition = True
+
     # if input is blank return error
     if val == '':
         return error_message
+
     # checks if each element in checker is 0 or 1
     for x in checker:
         if x != '0' and x != '1':
@@ -88,14 +92,18 @@ def decToOct(val):
 def octToDec(val):
     converted_value = 0
     error_message = '[ something doesn\'t seem right with your input ]'
+    
     # increment power 
     counter = 0
+
     # splits string input into a list by character
     checker = [val for val in val]
     condition = True
+
     # if input is blank return error
     if val == '' or val.isnumeric() is not True:
         return error_message
+
     # checks if each element in checker between 0 and 8
     for x in checker:
         if int(x) not in range(8):
@@ -120,6 +128,7 @@ def octToDec(val):
 def hexToBin(val):
     # initializing variables
     error_message = '[ something doesn\'t seem right with your input ]'
+
     unconverted_list = [val for val in val]
     converted_value_list = []
     converted_value = ""
@@ -165,8 +174,47 @@ def hexToBin(val):
     
     return converted_value
 
+# def binToHex(val):
+    # initializing variables
+    error_message = '[ something doesn\'t seem right with your input ]'
+    mod_value = 4
+    unconverted_val = ''
+
+    # check if user input has input errors
+    if val.isNum():
+        unconverted_val_int = val.toInt()
+    else:
+        return error_message
 
 
+    
+
+
+
+
+    return None
+
+def binToHex(val):
+    #initialize variables
+    mod_value = 4
+    input_error = False
+    error_message_binary = '[ something doesn\'t seem right with your input - try only inputting 0\'s and 1\'s ]'
+    error_message_mod = '[ something doesn\'t seem right with your input - try inputting values in groups of 4 ]'
+
+    #check if user input consists only of numbers
+    if val.isNum() is not True:
+        return error_message_binary
+    
+    # check if user input
+    checker = val.toInt()
+    if checker % 4 != 0:
+        return error_message_mod
+
+    
+    
+
+
+# MAIN APPLICATION LOOP
 while True:
     event, values = window.read()
 
@@ -186,7 +234,7 @@ while True:
         elif values['-CONVERSION_SELECTOR-'] == 'decimal to octal':
             converted_value = decToOct(val)
         elif values['-CONVERSION_SELECTOR-'] == 'hexidecimal to binary':
-            converted_value = hexToBin(val)
+            converted_value = hexToBin(val,)
 
         window['-VALUE_FIELD-'].update(converted_value)
 
