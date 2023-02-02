@@ -9,16 +9,16 @@ layout = [
     [sg.Text('Numeric Converter')],
     [
         sg.Input('',key = '-INPUT_FIELD-'),
-        sg.Spin([
+        sg.Combo([
                 'binary to decimal',
                 'decimal to binary',
                 'decimal to octal',
                 'octal to decimal',
                 'hexidecimal to binary',
                 'binary to hexidecimal'
-                ],key = '-CONVERSION_SELECTOR-'
+                ],key = '-CONVERSION_SELECTOR-', size=(30,6)
                 )],
-    [sg.Button('Convert', key="-CONVERT_BUTTON-"), sg.Text('Converted Value   ->'), sg.Text("''", key='-VALUE_FIELD-')]
+    [sg.Button('Convert', key="-CONVERT_BUTTON-"), sg.Text('Converted Value   ->'), sg.Input('', key='-VALUE_FIELD-', size=(51,None))]
 ]
 
 window = sg.Window('Converter Application', layout)
@@ -36,27 +36,25 @@ def binToDec(val):
 
     # if input is blank return error
     if val == '':
-        return error_message
+        sg.popup_error(error_message)
+        return 'error'
 
     # checks if each element in checker is 0 or 1
     for x in checker:
         if x != '0' and x != '1':
-            condition = False
+            sg.popup_error(error_message)
+            return 'error'
 
-    # if input is only 1's and 0's we convert from binary to decimal   
-    if condition == True:
-        val = int(val)
-        while val != 0:
-            digit = val % 10
-            converted_value = converted_value + (digit * pow(2,counter))
-            counter += 1
-            val = val//10
+
+    val = int(val)
+    while val != 0:
+        digit = val % 10
+        converted_value = converted_value + (digit * pow(2,counter))
+        counter += 1
+        val = val//10
     
-    # if there is something wrong with input, we throw an error message
-    else:
-        converted_value = error_message
 
-    # returns converted value or error message
+    # returns converted value
     return converted_value
 
 def decToBin(val):
@@ -65,7 +63,8 @@ def decToBin(val):
 
     # return error message if inputed value is empty
     if val == '':
-        return error_message
+        sg.popup_error(error_message)
+        return 'error'
     
     # if input value is only numbers, we can continue with code
     if val.isnumeric():
@@ -75,7 +74,8 @@ def decToBin(val):
             converted_value = str(digit) + converted_value
             val = val // 2
     else:
-        return error_message
+        sg.popup_error(error_message)
+        return 'error'
     
     return converted_value
 
@@ -108,16 +108,17 @@ def octToDec(val):
 
     # splits string input into a list by character
     checker = [val for val in val]
-    condition = True
 
     # if input is blank return error
     if val == '' or val.isnumeric() is not True:
-        return error_message
+        sg.popup_error(error_message)
+        return 'error'
 
     # checks if each element in checker between 0 and 8
     for x in checker:
         if int(x) not in range(8):
-            condition = False
+            sg.popup_error(error_message)
+            return 'error'
 
     # if input is in range(8) we convert from binary to decimal   
     if condition == True:
@@ -130,7 +131,8 @@ def octToDec(val):
     
     # if there is something wrong with input, we throw an error message
     else:
-        converted_value = error_message
+        sg.popup_error(error_message)
+        return 'error'
 
     # returns converted value or error message
     return converted_value
@@ -171,7 +173,8 @@ def hexToBin(val):
 
     # throw error message if input errors
     if val.isalnum() is not True or incorrect_input is True:
-        return error_message
+        sg.popup_error(error_message)
+        return 'error'
 
     # iterate through unconverted list and append correct values from dictionary to converted value list
     for val in unconverted_list:
@@ -184,26 +187,6 @@ def hexToBin(val):
     
     converted_value.rstrip()
     return converted_value
-
-# def binToHex(val):
-    # initializing variables
-    error_message = '[ something doesn\'t seem right with your input ]'
-    mod_value = 4
-    unconverted_val = ''
-
-    # check if user input has input errors
-    if val.isNum():
-        unconverted_val_int = val.toInt()
-    else:
-        return error_message
-
-
-    
-
-
-
-
-    return None
 
 def binToHex(val):
     # initialize variables
@@ -235,17 +218,20 @@ def binToHex(val):
 
     # check if user input consists only of numbers 0 or 1
     if val.isnumeric() is not True:
-        return error_message_binary
+        sg.popup_error(error_message_binary)
+        return 'error'
     
     # check if each char in val is 0 or 1
     for str in val_list:
         if str is not ('0' or '1'):
-            return error_message_binary
+            sg.popup_error(error_message_binary)
+            return 'error'
 
     # check if user input
     checker = val.toInt()
     if checker % 4 != 0:
-        return error_message_mod
+        sg.popup_error(error_message_mod)
+        return 'error'
     
 
     for num in val:
@@ -256,8 +242,6 @@ def binToHex(val):
         reader = ''
     
     return converted_value
-    
-    
 
 
 # MAIN APPLICATION LOOP
