@@ -7,7 +7,17 @@ import PySimpleGUI as sg
 
 layout = [
     [sg.Text('Numeric Converter')],
-    [sg.Input('',key = '-INPUT_FIELD-'), sg.Spin(['binary to decimal','decimal to binary','decimal to octal', 'octal to decimal', 'hexidecimal to binary'],key = '-CONVERSION_SELECTOR-')],
+    [
+        sg.Input('',key = '-INPUT_FIELD-'),
+        sg.Spin([
+                'binary to decimal',
+                'decimal to binary',
+                'decimal to octal',
+                'octal to decimal',
+                'hexidecimal to binary',
+                'binary to hexidecimal'
+                ],key = '-CONVERSION_SELECTOR-'
+                )],
     [sg.Button('Convert', key="-CONVERT_BUTTON-"), sg.Text('Converted Value   ->'), sg.Text("''", key='-VALUE_FIELD-')]
 ]
 
@@ -172,6 +182,7 @@ def hexToBin(val):
     for num in converted_value_list:
         converted_value = converted_value + num
     
+    converted_value.rstrip()
     return converted_value
 
 # def binToHex(val):
@@ -195,21 +206,56 @@ def hexToBin(val):
     return None
 
 def binToHex(val):
-    #initialize variables
+    # initialize variables
     mod_value = 4
     input_error = False
     error_message_binary = '[ something doesn\'t seem right with your input - try only inputting 0\'s and 1\'s ]'
     error_message_mod = '[ something doesn\'t seem right with your input - try inputting values in groups of 4 ]'
+    reader = ''
+    converted_value = ''
+    val_list = [val for val in val]
+    dict = {
+        "0000": "0",
+        "0001": "1",
+        "0010": "2",
+        "0011": "3",
+        "0100": "4",
+        "0101": "5",
+        "0110": "6",
+        "0111": "7",
+        "1000": "8",
+        "1001": "9",
+        "1010": "A",
+        "1011": "B",
+        "1100": "C",
+        "1101": "D",
+        "1110": "E",
+        "1111": "F"
+    }
 
-    #check if user input consists only of numbers
-    if val.isNum() is not True:
+    # check if user input consists only of numbers 0 or 1
+    if val.isnumeric() is not True:
         return error_message_binary
     
+    # check if each char in val is 0 or 1
+    for str in val_list:
+        if str is not ('0' or '1'):
+            return error_message_binary
+
     # check if user input
     checker = val.toInt()
     if checker % 4 != 0:
         return error_message_mod
+    
 
+    for num in val:
+        for i in range(4):
+            reader = reader + num
+        
+        converted_value = converted_value + dict.get(reader)
+        reader = ''
+    
+    return converted_value
     
     
 
@@ -234,7 +280,9 @@ while True:
         elif values['-CONVERSION_SELECTOR-'] == 'decimal to octal':
             converted_value = decToOct(val)
         elif values['-CONVERSION_SELECTOR-'] == 'hexidecimal to binary':
-            converted_value = hexToBin(val,)
+            converted_value = hexToBin(val)
+        elif values['-CONVERSION_SELECTOR-'] == 'binary to hexidecimal':
+            converted_value = binToHex(val)
 
         window['-VALUE_FIELD-'].update(converted_value)
 
