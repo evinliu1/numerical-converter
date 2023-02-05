@@ -3,8 +3,10 @@
 # 1/02/23 -
 # Evin Kai Liu
 
+from dotenv import load_dotenv,find_dotenv
 import PySimpleGUI as sg
 
+load_dotenv(find_dotenv())
 layout = [
     [sg.Text('Numeric Converter')],
     [
@@ -121,13 +123,12 @@ def octToDec(val):
             return 'error'
 
     # if input is in range(8) we convert from binary to decimal   
-    if condition == True:
-        val = int(val)
-        while val != 0:
-            digit = val % 10
-            converted_value = converted_value + (digit * pow(8,counter))
-            counter += 1
-            val = val//10
+    val = int(val)
+    while val != 0:
+        digit = val % 10
+        converted_value = converted_value + (digit * pow(8,counter))
+        counter += 1
+        val = val//10
     
     # if there is something wrong with input, we throw an error message
     else:
@@ -185,7 +186,7 @@ def hexToBin(val):
     for num in converted_value_list:
         converted_value = converted_value + num
     
-    converted_value.rstrip()
+    converted_value = converted_value.rstrip()
     return converted_value
 
 def binToHex(val):
@@ -196,6 +197,7 @@ def binToHex(val):
     error_message_mod = '[ something doesn\'t seem right with your input - try inputting values in groups of 4 ]'
     reader = ''
     converted_value = ''
+    val = val.strip()
     val_list = [val for val in val]
     dict = {
         "0000": "0",
